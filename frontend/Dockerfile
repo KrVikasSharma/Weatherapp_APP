@@ -6,9 +6,17 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
+# Build-time environment: optionally provide VITE_API_URL as a build-arg in CI
+ARG VITE_API_URL=""
+ENV VITE_API_URL="${VITE_API_URL}"
+
 # Copy source code and build
-COPY .env .env
+# If a .env file is present in the build context it will be included by COPY . .
+# If not present we create a simple .env containing VITE_API_URL so build won't fail
 COPY . .
+RUN if [ ! -f .env ]; then \
+			printf 'VITE_API_URL="%s"\n' "$VITE_API_URL" > .env; \
+		fi
 RUN npm run build
 
 # Stage 2: Serve with Nginx

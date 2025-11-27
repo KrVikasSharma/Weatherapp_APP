@@ -30,6 +30,12 @@ Optional / notes
 	- Note: GitHub-hosted runners use a Docker driver that doesn't support multi-arch builds by default. The workflow now creates a dedicated buildx builder which uses the docker-container driver and QEMU (see `.github/workflows/docker-build-and-push.yml`) so multi-platform builds succeed.
 		- Note: GitHub-hosted runners use a Docker driver that doesn't support multi-arch builds by default. The workflow now creates a dedicated buildx builder which uses the docker-container driver and QEMU (see `.github/workflows/docker-build-and-push.yml`) so multi-platform builds succeed.
 		- Important: buildx builders are created per runner. If you create a builder in one job/runner (e.g. a separate "setup" job) it won't be available in other jobs because each job runs on a different runner. That causes the error "no builder <id> found". To avoid that, the workflow creates a builder inside each build job (backend and frontend) — the builder exists on the same runner and `docker/build-push-action` can use it.
+
+		Frontend build notes:
+		- The frontend Dockerfile previously attempted to `COPY .env .env` which causes the build to fail if `.env` is not present in the repository or workflow build context.
+		- The Dockerfile has been updated to create a fallback `.env` if none is found. CI can also pass values at build-time using build-args.
+
+		To supply a frontend variable during CI builds, add the repository secret `VITE_API_URL` and the workflow will pass it as a build-arg so the built app receives the value (the Dockerfile will fall back to an empty value if the secret isn't set).
 - Make sure the Dockerfile paths are `frontend/Dockerfile` and `backend/Dockerfile` (these are already present in the repo).
 - If you want different image names, set them either by editing the workflow or by storing the repo name in a new secret (e.g. `DOCKERHUB_REPO_BACKEND`).
 

@@ -94,6 +94,9 @@ jobs:
           builder: ${{ steps.builder.outputs.name }}
           context: ./frontend
           file: ./frontend/Dockerfile
+          # Optional build-args: pass values from repository secrets (e.g. VITE_API_URL)
+          build-args: |
+            VITE_API_URL=${{ secrets.VITE_API_URL }}
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
