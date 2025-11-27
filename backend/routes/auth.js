@@ -1,5 +1,5 @@
 import express from 'express';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {
   createUser,
@@ -15,7 +15,7 @@ router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    if (!name  !email  !password) {
+    if (!name || !email || !password) {
       return res.status(400).json({ error: 'All fields are required' });
     }
 

@@ -3,8 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import db from './db/index.js';
-import path from 'path';
-import fs from 'fs';
+// path/fs were imported previously but are not used in this file; removed to avoid unused import warnings
 
 dotenv.config();
 
@@ -33,5 +32,5 @@ app.get('/health', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(Server listening on port ${PORT});
+  console.log(`Server listening on port ${PORT}`);
 });
