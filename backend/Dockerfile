@@ -1,5 +1,5 @@
 # Use a small Node base
-FROM node:20-alpine
+FROM node:20-slim
 
 # Create app directory
 WORKDIR /usr/src/app

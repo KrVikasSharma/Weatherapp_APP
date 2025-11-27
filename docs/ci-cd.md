@@ -36,6 +36,9 @@ Optional / notes
 		- The Dockerfile has been updated to create a fallback `.env` if none is found. CI can also pass values at build-time using build-args.
 
 		To supply a frontend variable during CI builds, add the repository secret `VITE_API_URL` and the workflow will pass it as a build-arg so the built app receives the value (the Dockerfile will fall back to an empty value if the secret isn't set).
+
+		Note about base images and QEMU
+		- Some builds (notably multi-arch arm64 builds under QEMU) can crash inside Alpine images with errors like "qemu: uncaught target signal 4 (Illegal instruction)". To avoid these QEMU emulation issues the project now uses Debian-based slim Node images (`node:20-slim`) for the build/runtime stages. These images are larger than Alpine but more stable under emulation.
 - Make sure the Dockerfile paths are `frontend/Dockerfile` and `backend/Dockerfile` (these are already present in the repo).
 - If you want different image names, set them either by editing the workflow or by storing the repo name in a new secret (e.g. `DOCKERHUB_REPO_BACKEND`).
 
