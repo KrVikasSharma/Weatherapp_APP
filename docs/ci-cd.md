@@ -26,6 +26,8 @@ Add the following repository secrets in GitHub (Settings → Secrets → Actions
 Optional / notes
 
 - The workflow builds multi-arch images (linux/amd64 and linux/arm64) using Docker Buildx.
+- The workflow builds multi-arch images (linux/amd64 and linux/arm64) using Docker Buildx.
+	- Note: GitHub-hosted runners use a Docker driver that doesn't support multi-arch builds by default. The workflow now creates a dedicated buildx builder which uses the docker-container driver and QEMU (see `.github/workflows/docker-build-and-push.yml`) so multi-platform builds succeed.
 - Make sure the Dockerfile paths are `frontend/Dockerfile` and `backend/Dockerfile` (these are already present in the repo).
 - If you want different image names, set them either by editing the workflow or by storing the repo name in a new secret (e.g. `DOCKERHUB_REPO_BACKEND`).
 
